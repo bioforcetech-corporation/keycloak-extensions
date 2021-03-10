@@ -50,7 +50,7 @@ public class UserVerifiedTransaction extends AbstractKeycloakTransaction {
       // log.info("-----------------------------------------------------------");
 
       HttpRequest request = HttpRequest.newBuilder().POST(bp).uri(URI.create("https://api.plexus-automation.com/users"))
-          .header(CONTENT_TYPE, MediaType.APPLICATION_JSON).build();
+          .header(CONTENT_TYPE, MediaType.APPLICATION_JSON).header("X-Keycloak-Key", "asdQWE123-allow-user-creation").build();
 
       HttpResponse<String> response = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
 
