@@ -5,8 +5,8 @@ Also contains an example of a transaction when acting on a certain event.
 
 ## Keycloak config
 
-Copy the jar in the target folder to the `/opt/jboss/keycloak/standalone/deployments/` folder.
-Or when using Docker mount the file `./jar-name.jar:/opt/jboss/keycloak/standalone/deployments/jar-name.jar`
+Copy the jar in the target folder to the `/opt/keycloak/standalone/deployments/` folder.
+Or when using Docker mount the file `./jar-name.jar:/opt/keycloak/standalone/deployments/jar-name.jar`
 
 ## Keycloak admin console configuration
 

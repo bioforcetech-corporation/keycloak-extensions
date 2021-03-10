@@ -1,7 +1,32 @@
+# Requirements
+
+Install on MacOSx brew and java11.
+
+[How to here](https://devqa.io/brew-install-java/)
+
+Remember to add the lines both in ~/.bash_profile and ~/.zshrc
+
+``` sh
+export JAVA_8_HOME=$(/usr/libexec/java_home -v1.8)
+export JAVA_11_HOME=$(/usr/libexec/java_home -v11)
+alias java8='export JAVA_HOME=$JAVA_8_HOME'
+alias java11='export JAVA_HOME=$JAVA_11_HOME'
+# default to Java 11
+java11
+```
+
+### Production Apache permissions
+
+``` sh
+sudo usermod -a -G keycloak ubuntu
+sudo chown -R keycloak:keycloak /opt/keycloak/
+sudo find /opt/keycloak/ -type f -exec chmod 664 {} \;
+sudo find /opt/keycloak/ -type d -exec chmod 775 {} \;
+```
+
 # Keycloak extensions
 
-Keycloak extension examples.  
-Titles with * are already activated when running `docker-compose up`
+Keycloak extension examples.
 
 * [provider-domain](provider-domain/README.md) *
   * example of adding new domain entities  
@@ -16,63 +41,40 @@ Titles with * are already activated when running `docker-compose up`
 * [theme-minimal](theme-minimal/README.md) *
   * a custom theme with minimal changes
 
+## Deploy on server
+
+```
+cd /opt/keycloak/standalone/deployments
+copy here the .jar file (built file in /spi-xxxxx/target/xxxx.jar) moving out the older version of the .jar
+```
+
+Open Keycloak Admin Console [link](https://auth.plexus-automation.com/auth)
+Go to Manage -> Events -> Config
+Under "Event Listeners" you may add your event listener (default name is "pl_event_listener")
+
+
 ## Build
 
-Build all
+- Increase versioning in related /spi-xxxxx/pom.xml
 
-    ./mvnw clean install
+- Build all
 
-Build single module
+``` sh
+./mvnw clean install
+```
 
-    ./mvnw clean install -pl provider-domain
-    ./mvnw clean install -pl spi-event-listener
-    ./mvnw clean install -pl spi-mail-template-override
-    ./mvnw clean install -pl spi-registration-profile
-    ./mvnw clean install -pl spi-resource
-    ./mvnw clean install -pl theme-minimal
+- Or Build single module
+
+``` sh
+./mvnw clean install -pl provider-domain
+./mvnw clean install -pl spi-event-listener
+./mvnw clean install -pl spi-mail-template-override
+./mvnw clean install -pl spi-registration-profile
+./mvnw clean install -pl spi-resource
+./mvnw clean install -pl theme-minimal
+```
 
 ## Run with Docker Compose
-
-You need to build all modules first because we mount the jars in the docker-compose file
-
-Run
-
-    docker-compose up
-
-Stop
-
-    CTRL + C
-    docker-compose down    
-
-* Keycloak admin will be available on http://localhost:8088/auth/
-  * User -> admin
-  * Password -> password
-* A placeholder realm is available on http://localhost:8088/auth/realms/placeholder
-  * users
-    * james@placeholder.com
-    * jennifer@placeholder.com
-    * john@placeholder.com
-    * mary@placeholder.com
-    * patricia@placeholder.com
-    * robert@placeholder.com
-  * Password is always 'password' for those users
-  * a realm role product_view is available and assigned to robert@placeholder.com
-  * 2 clients are available under this realm
-    * client-one - public with Direct Access Grants Enabled
-    * client-two - public with Direct Access Grants Enabled
-* Mailhog will be available on http://localhost:8025/
-
-## Export realms and users
-
-* Run `docker-compose up`
-* Make your changes in Keycloak
-* Press `CTRL + C ` but do NOT run docker-compose down
-* Uncomment the `-Dkeycloak.migration.action=export...` under commands in the docker-compose file.  
-* Comment the `-Dkeycloak.migration.action=import` under commands in the docker-compose file.
-* Run `docker-compose up`
-* all realms and users will be exported in the `_resources/demo-config/export-dir`
-* You can now run `docker-compose down` and revert the changes you made to the docker-compose file
-* Copy the contents of the export dir to the import dir if you want to replace them
 
 ## Other resources
 
