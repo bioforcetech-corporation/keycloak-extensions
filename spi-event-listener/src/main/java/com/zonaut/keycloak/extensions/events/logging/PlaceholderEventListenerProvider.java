@@ -48,7 +48,7 @@ public class PlaceholderEventListenerProvider implements EventListenerProvider {
         log.info("USER HAS VERIFIED EMAIL : " + event.getUserId());
 
         // Example of adding an attribute when this event happens
-        user.setSingleAttribute("attribute-key", "attribute-value");
+        // user.setSingleAttribute("attribute-key", "attribute-value");
 
         UserUuidDto userUuidDto = new UserUuidDto(event.getType().name(), event.getUserId(), user.getEmail(),
             user.getFirstName(), user.getLastName());
@@ -60,6 +60,27 @@ public class PlaceholderEventListenerProvider implements EventListenerProvider {
 
         session.getTransactionManager().enlistPrepare(userVerifiedTransaction);
       }
+    } else if (EventType.IDENTITY_PROVIDER_FIRST_LOGIN.equals(event.getType())) {
+      RealmModel realm = this.model.getRealm(event.getRealmId());
+      UserModel user = this.session.users().getUserById(event.getUserId(), realm);
+      if (user != null && user.getEmail() != null) {
+        log.info("USER HAS LOGGED IN FOR THE FIRST TIME WITH AN IDENTITY PROVIDER : " + event.getUserId());
+
+        // Example of adding an attribute when this event happens
+        // user.setSingleAttribute("attribute-key", "attribute-value");
+
+        UserUuidDto userUuidDto = new UserUuidDto(event.getType().name(), event.getUserId(), user.getEmail(),
+            user.getFirstName(), user.getLastName());
+        UserVerifiedTransaction userVerifiedTransaction = new UserVerifiedTransaction(userUuidDto);
+
+        // enlistPrepare -> if our transaction fails than the user is NOT verified
+        // enlist -> if our transaction fails than the user is still verified
+        // enlistAfterCompletion -> if our transaction fails our user is still verified
+
+        session.getTransactionManager().enlistPrepare(userVerifiedTransaction);
+      }
+    } else if (EventType.DELETE_ACCOUNT.equals(event.getType())) {
+
     }
     log.info("-----------------------------------------------------------");
   }

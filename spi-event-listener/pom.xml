@@ -4,7 +4,7 @@
 
     <groupId>com.zonaut.keycloak</groupId>
     <artifactId>spi-event-listener</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <packaging>jar</packaging>
 
     <name>KEYCLOAK EXTENSIONS :: SPI event listener</name>

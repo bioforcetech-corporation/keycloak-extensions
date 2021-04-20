@@ -74,6 +74,8 @@ Under "Event Listeners" you may add your event listener (default name is "pl_eve
 ./mvnw clean install -pl theme-minimal
 ```
 
+This will create a build .jar file under /spi-xxxxx/target/
+
 ## Run with Docker Compose
 
 ## Other resources
