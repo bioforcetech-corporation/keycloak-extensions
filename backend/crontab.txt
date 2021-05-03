@@ -22,4 +22,4 @@
 # 
 # m h  dom mon dow   command
 0 23 * * * /bin/bash /home/ubuntu/mysql-backups/daily-backup-lite.sh >>/home/ubuntu/mysql-backups/daily-backup-lite.log 2>&1
-1 23 * * * /bin/bash /home/ubuntu/mysql-backups/weekly-backup-full.sh >>/home/ubuntu/mysql-backups/weekly-backup-full.log 2>&1
+1 23 * * MON /bin/bash /home/ubuntu/mysql-backups/weekly-backup-full.sh >>/home/ubuntu/mysql-backups/weekly-backup-full.log 2>&1
