@@ -41,10 +41,12 @@ public class PlaceholderEventListenerProvider implements EventListenerProvider {
     // the user remains unverified and when trying to login will receive another
     // verify account email.
 
+    RealmModel realm = this.model.getRealm(event.getRealmId());
+    String cloudApiHost = event.getRealmId().contains("staging") || event.getRealmId().contains("test") ? "https://api-staging.plexus-automation.com" : "https://api.plexus-automation.com";
+    UserModel user = this.session.users().getUserById(event.getUserId(), realm);
+
     // this is needed for registration via Identity Providers (user.isEmailVerified() is TRUE since its born)
     if (EventType.REGISTER.equals(event.getType())) {
-      RealmModel realm = this.model.getRealm(event.getRealmId());
-      UserModel user = this.session.users().getUserById(event.getUserId(), realm);
       if (user != null && user.getEmail() != null && user.isEmailVerified()) {
         log.info("USER HAS REGISTERED WITH IDENTITY PROVIDER : " + event.getUserId());
 
@@ -53,7 +55,7 @@ public class PlaceholderEventListenerProvider implements EventListenerProvider {
 
         UserUuidDto userUuidDto = new UserUuidDto(event.getType().name(), event.getUserId(), user.getEmail(),
             user.getFirstName(), user.getLastName());
-        UserVerifiedTransaction userVerifiedTransaction = new UserVerifiedTransaction(userUuidDto);
+        UserVerifiedTransaction userVerifiedTransaction = new UserVerifiedTransaction(userUuidDto, cloudApiHost);
 
         // enlistPrepare -> if our transaction fails than the user is NOT verified
         // enlist -> if our transaction fails than the user is still verified
@@ -62,8 +64,6 @@ public class PlaceholderEventListenerProvider implements EventListenerProvider {
         session.getTransactionManager().enlistPrepare(userVerifiedTransaction);
       }
     } else if (EventType.VERIFY_EMAIL.equals(event.getType())) {
-      RealmModel realm = this.model.getRealm(event.getRealmId());
-      UserModel user = this.session.users().getUserById(event.getUserId(), realm);
       if (user != null && user.getEmail() != null && user.isEmailVerified()) {
         log.info("USER HAS VERIFIED EMAIL : " + event.getUserId());
 
@@ -72,7 +72,7 @@ public class PlaceholderEventListenerProvider implements EventListenerProvider {
 
         UserUuidDto userUuidDto = new UserUuidDto(event.getType().name(), event.getUserId(), user.getEmail(),
             user.getFirstName(), user.getLastName());
-        UserVerifiedTransaction userVerifiedTransaction = new UserVerifiedTransaction(userUuidDto);
+        UserVerifiedTransaction userVerifiedTransaction = new UserVerifiedTransaction(userUuidDto, cloudApiHost);
 
         // enlistPrepare -> if our transaction fails than the user is NOT verified
         // enlist -> if our transaction fails than the user is still verified
