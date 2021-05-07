@@ -4,11 +4,12 @@
 
 	<groupId>com.zonaut.keycloak</groupId>
 	<artifactId>keycloak-extensions</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>pom</packaging>
 	<name>KEYCLOAK EXTENSIONS</name>
 
 	<modules>
+		<module>ses-email-sender-provider</module>
 		<module>provider-domain</module>
 		<module>spi-event-listener</module>
 		<module>spi-mail-template-override</module>

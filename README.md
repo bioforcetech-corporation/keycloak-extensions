@@ -66,6 +66,7 @@ Under "Event Listeners" you may add your event listener (default name is "pl_eve
 - Or Build single module
 
 ``` sh
+./mvnw clean install -pl ses-email-sender-provider
 ./mvnw clean install -pl provider-domain
 ./mvnw clean install -pl spi-event-listener
 ./mvnw clean install -pl spi-mail-template-override
@@ -75,6 +76,8 @@ Under "Event Listeners" you may add your event listener (default name is "pl_eve
 ```
 
 This will create a build .jar file under /spi-xxxxx/target/
+
+In the case of ses-email-sender-provider, it will produce 2 jars. You must move to the deployment folder (on server) the bigger one, the one that includes the amazon sdk libs!
 
 ## Run with Docker Compose
 

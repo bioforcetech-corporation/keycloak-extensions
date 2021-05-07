@@ -75,8 +75,10 @@ WILDFLY_CONFIG=standalone.xml
 WILDFLY_MODE=standalone
 # The address to bind to
 WILDFLY_BIND=0.0.0.0
-# The address console to bind to
-WILDFLY_MANAGEMENT_CONSOLE_BIND=0.0.0.0
+# AWS SDK (SES for sending emails)
+AWS_DEFAULT_REGION=us-west-2
+AWS_ACCESS_KEY_ID=AKIAXGV3HR6PR47CE4AO
+AWS_SECRET_KEY=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
 ```
 
 sudo nano /opt/keycloak/bin/launch.sh
